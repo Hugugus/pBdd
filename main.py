@@ -1,4 +1,5 @@
 import sys
+import time
 
 from Bdd import Bdd
 
@@ -10,8 +11,12 @@ def main():
     mMenu(bddC)
 
 def eMenu(bdd):
-    c=input("Que voulez-vous faire ? \n(0) : Afficher les DF\n(1) : Ajouter une DF\n(2) : Modifier DF\n(3) : Supprimer une DF\n(4) : Supprimer les DF inutile et incoherente\n(5) : Generer de clés a partir des DF pour une table\n"
-            "(6) : Verification des normes BCNF et 3NF sur toute la bdd \n(7) : Retour au menu principal\n" )
+    txt="Que voulez-vous faire ? \n(0) : Afficher les DF\n(1) : Ajouter une DF\n(2) : Modifier DF\n(3) : Supprimer une DF\n(4) : Supprimer les DF inutile et incoherente\n(5) : Generer de clés a partir des DF pour une table\n(6) : Verification des normes BCNF et 3NF sur toute la bdd \n(7) : Retour au menu principal\n"
+    txt=txt.split("\n")
+    for x in txt:
+        print(x)
+        time.sleep(0.3)
+    c=input()
     if(c=="0"): #afficher df
         bdd.notDF()
         bdd.printFuncDep(True)
@@ -34,7 +39,7 @@ def eMenu(bdd):
     elif (c=="3"): #delete df
         if len(bdd.tab)>0:
             bdd.printFuncDep(False)
-            v=input("Quelle DF voulez-vous supprimer?\n")
+            v=input("Quelle DF voulez-vous supprimer? Veuillez introduire un chiffre\n")
             bdd.deleteDF(int(v))
         else :
             print("Il n'ya pas de DF ")
@@ -138,6 +143,8 @@ def eMenu(bdd):
         else:
             eMenu(bdd)
 
+        eMenu(bdd)
+
     elif (c=="5"):
         bdd.getKey()
         eMenu(bdd)
@@ -150,8 +157,13 @@ def eMenu(bdd):
         mMenu(bdd)
 
 def mMenu(bdd):
-    c=input("\nQue voulez-vous faire ?\n(0) : Afficher toutes les DF\n(1) : Option sur les DF\n"
-            "(2) : Afficher une table\n(3) : Sauvegarder\n(4) : Charger\n(5) : Quittez\n")
+    h="Que voulez-vous faire ?|(0) : Afficher toutes les DF|(1) : Option sur les DF|(2) : Afficher une table|(3) : Sauvegarder toutes les DF |(4) : Charger un sauvegarde des DF|(5) : Quittez"
+    h=h.split("|")
+    for x in h:
+        print(x)
+        time.sleep(0.3)
+
+    c=input()
     if(c=="0"): #afficher df
         bdd.printFuncDep(True)
         mMenu(bdd)

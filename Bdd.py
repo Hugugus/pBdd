@@ -1,6 +1,7 @@
 import copy
 import os
 import sqlite3
+import time
 
 import np as np
 
@@ -157,7 +158,7 @@ class Bdd:
                 print("Voici les DF de la bdd\n")
                 for i in range (len(self.tab)):
                     tab=self.tab[i]
-                    print(i,end='')
+                    print("("+str(i)+")",end='')
                     print(" "+tab[0]+" : "+tab[1]+" -> "+tab[2])
 
                 if editing :
@@ -200,6 +201,7 @@ class Bdd:
                                 if c=="0":
                                     for i in range (len(tab)):
                                         self.deleteDF(int(tab[i]))
+
                             else :
                                 print("Il n'y pas de DF étant des consequences logique")
 
@@ -530,20 +532,27 @@ class Bdd:
                 init=Key(names,df)
                 key=init.getKey()
                 print("\nAttribut de la tab "+v[0]+" :")
-                print(names)
-                print("DF de la table"+v[0]+" : ")
+                for i in names:
+                    print(i,end=" | ")
+                print()
+                time.sleep(1)
+                print("DF de la table "+v[0]+" : ")
                 for i in df:
                     print(i[1],end=" -> ")
                     print(i[2])
-                print("cle de la table"+v[0]+" : ")
+                time.sleep(1)
+                print("cle de la table "+v[0]+" : ")
                 for i in key:
                     print(i)
 
                 print()
+                time.sleep(1)
                 target=init.getNorme(key,df,names)
                 print(v[0],end=" : BCNF= ")
                 print(target[0],end=" et  3NF= ")
                 print(target[1])
+                print("------------------------------------------------------------------------------------------------------")
+                time.sleep(2)
 
 
 
