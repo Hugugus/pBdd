@@ -11,7 +11,7 @@ def main():
     mMenu(bddC)
 
 def eMenu(bdd):
-    txt="Que voulez-vous faire ? \n(0) : Afficher les DF\n(1) : Ajouter une DF\n(2) : Modifier DF\n(3) : Supprimer une DF\n(4) : Supprimer les DF inutile et incoherente\n(5) : Generer de clés a partir des DF pour une table\n(6) : Verification des normes BCNF et 3NF sur toute la bdd \n(7) : Retour au menu principal\n"
+    txt="Menu option pour les DF  : \n(0) : Afficher les DF\n(1) : Ajouter une DF\n(2) : Modifier DF\n(3) : Supprimer une DF\n(4) : Supprimer les DF inutile et incoherente\n(5) : Generer de clés a partir des DF pour une table\n(6) : Verification des normes BCNF et 3NF sur toute la bdd \n(7) : Supprimer toutes les DF\n(8) : Retour au menu principal\n\nQue voulez-vous faire ? "
     txt=txt.split("\n")
     for x in txt:
         print(x)
@@ -153,11 +153,24 @@ def eMenu(bdd):
         bdd.getTKey()
         print()
         eMenu(bdd)
+    elif c=="7":
+        print("Voici toutes les DF : ")
+        for i in range (len(bdd.tab)):
+            tab=bdd.tab[i]
+            print("("+str(i)+")",end='')
+            print(" "+tab[0]+" : "+tab[1]+" -> "+tab[2])
+            time.sleep(0.3)
+        print()
+        v=input("Voulez-vous vraiment supprimer toutes ces DF?\n(0) : Oui\n(1) : Non\n")
+        if v=="0":
+            bdd.tab=[]
+            print("Toutes les DF on été supprimé\n")
+        eMenu(bdd)
     else :
         mMenu(bdd)
 
 def mMenu(bdd):
-    h="Que voulez-vous faire ?|(0) : Afficher toutes les DF|(1) : Option sur les DF|(2) : Afficher une table|(3) : Sauvegarder toutes les DF |(4) : Charger un sauvegarde des DF|(5) : Quittez"
+    h="Menu principal : |(0) : Afficher toutes les DF|(1) : Option sur les DF|(2) : Afficher une table|(3) : Sauvegarder toutes les DF |(4) : Charger un sauvegarde des DF|(5) : Quittez||Que voulez-vous faire ?"
     h=h.split("|")
     for x in h:
         print(x)

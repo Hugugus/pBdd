@@ -160,6 +160,7 @@ class Bdd:
                     tab=self.tab[i]
                     print("("+str(i)+")",end='')
                     print(" "+tab[0]+" : "+tab[1]+" -> "+tab[2])
+                    time.sleep(0.3)
 
                 if editing :
 
@@ -176,6 +177,7 @@ class Bdd:
                                     tab=self.tab[i]
                                     print(i,end='')
                                     print(" "+tab[0]+" : "+tab[1]+" -> "+tab[2])
+                                    time.sleep(0.3)
                             c=input("Voulez-vous supprimer toutes ces DF?\n(0) : Oui\n(1) : Non\n")
                             if c=="0":
                                 for i in range (len(self.tab)):
@@ -195,8 +197,10 @@ class Bdd:
                                     #print(tab)
                                     t=self.tab[int(tab[i])]
                                     print(str(tab[i])+" "+t[0]+" : "+t[1]+" -> "+t[2])
+                                    time.sleep(0.3)
 
-                                    #print(i,end='')
+
+                                #print(i,end='')
                                 c=input("Voulez-vous supprimer toutes ces DF?\n(0) : Oui\n(1) : Non\n")
                                 if c=="0":
                                     for i in range (len(tab)):
@@ -218,6 +222,7 @@ class Bdd:
                         t=self.tab[int(i)]
                         resNDF.append(int(i))
                         print(str(i)+" "+t[0]+" : "+t[1]+" -> "+t[2])
+                        time.sleep(0.3)
                 v=input("\nVoulez-vous supprimer toutes les DF ayant pas des attributs qui ne sont pas la bdd?\n(0) : Oui\n(1) : Non\n")
                 if v=="0":
                     tab=self.notDF()
@@ -225,7 +230,7 @@ class Bdd:
                         self.deleteDF(int(i))
 
         else : #Si pas de DF
-            print("Il n'y a actuellement aucune DF, veuillez en génerer, en ajouter ou en charger")
+            print("Il n'y a actuellement aucune DF, veuillez en ajouter ou en charger")
         return res
 
     def logDf(self): # DF transitive
@@ -372,8 +377,12 @@ class Bdd:
                 tabh.append(tabN)
                 tabh.append(encode)
                 tabh.append(dst)
-                self.tab.append(tabh)
-                self.apply(tabh)
+                if tabh not in self.tab:
+                    self.tab.append(tabh)
+                    print("Cette DF a été ajouté : ",end="")
+                    print(tabh[0]+" : "+tabh[1]+" -> "+tabh[2])
+                else :
+                    print("Cette DF est deja présente")
             else:
                 print("La partie a droite de la DF a plus d'une valeur \n")
 
@@ -390,38 +399,47 @@ class Bdd:
             save.write(s)
         print (save)
         save.close()
+        print("Sauvegarde effectué")
 
     def deleteDF(self,i): #Permet de supprimer une df
         print("Cette DF a été supprimé ",end='')
-        print(self.tab[i][1]+" -> "+self.tab[i][2])
+        print(self.tab[i][0]+" : "+self.tab[i][1]+" -> "+self.tab[i][2])
         self.tab.remove(self.tab[i])
-        #self.printFuncDep(False)
+        print()
 
     def edit(self): #Permet de modifier une DF
         if len(self.tab)>0:
             self.printFuncDep(False)
-            print("\n Quel numero de df voulez vous selectionner ?")
+            print("\nQuel numero de df voulez vous selectionner ?")
             val=input()
             val=int(val)
             c=len(self.tab)
             if val<c:
                 res=self.tab[val]
                 print("\nDf selectionné  : ")
-                print(res[1]+" -> "+res[2])
+                print(res[0]+" : "+res[1]+" -> "+res[2])
+                print("Voici les attributs de la table : ",end="")
                 self.printTable(str(res[0]),True)
-                print("Que voulez-vous modifier ?\n(0) : Les attributs\n(1) : La cible\n(2) : Les deux")
-                val=int(input())
-                if(val==0):
-                    c=input("Veuilliez entrer entrer le nouvel attribut\n")
+                print("Que voulez-vous modifier ?\n(0) : La partie de gauche\n(1) : La partie de droite\n(2) : Toute la DF\n(3) : Rien")
+                val=input()
+                if(val=="0"):
+                    c=input("Veuilliez entrer entrer une partie de gauche\n")
                     res[1]=c
-                elif (val==2):
-                    c=input("Veuilliez entrer entrer une nouvelle cible\n")
+                    print("Cette DF a été modifié ",end="")
+                    print(res[0]+" : "+res[1]+" -> "+res[2])
+                elif (val=="1"):
+                    c=input("Veuilliez entrer entrer une nouvelle partie de droite\n")
                     res[2]=c
-                elif (val==3):
-                    c1=input("Veuilliez entrer entrer le nouvel attribut\n")
-                    c2=input("Veuilliez entrer entrer une nouvelle cible\n")
+                    print("Cette DF a été modifié ",end="")
+                    print(res[0]+" : "+res[1]+" -> "+res[2])
+
+                elif (val=="2"):
+                    c1=input("Veuilliez entrer entrer une nouvelle partie de gauche\n")
+                    c2=input("Veuilliez entrer entrer une nouvelle partie de droite \n")
                     res[1]=c1
                     res[2]=c2
+                    print("Cette DF a été modifié ",end="")
+                    print(res[0]+" : "+res[1]+" -> "+res[2])
 
 
 
@@ -447,6 +465,7 @@ class Bdd:
                     else :
                         print("Donne inutilisable")
                         self.tab=[]
+        print("Chargement réussi\n")
 
 
     def getKey(self): #Permet d'obtenir les clé via DF
@@ -515,7 +534,7 @@ class Bdd:
 
             return  res
 
-    def getTKey(self):
+    def getTKey(self): #Permet d'obtenir toutes les clés d'une bdd
         if(self.printFuncDep(False)):
             print()
             connect=sqlite3.connect(self.db)
